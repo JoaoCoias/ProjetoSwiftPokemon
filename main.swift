@@ -10,6 +10,7 @@ class Pokemon {
   var strength: String
   var xp: Int
   var xpreq: Int
+  var guardm: Bool
 
   init(name: String, hp: Double, attack: Double, defense: Double, type: String)
   {
@@ -18,6 +19,7 @@ class Pokemon {
     self.attack = attack
     self.defense = defense
     self.type = type
+    self.guardm = false
     if(type == "Fire"){
       weakness = "Water"
       strength = "Plant"
@@ -32,22 +34,34 @@ class Pokemon {
     xpreq = 50
   }
 
+  func guardmove(){
+    self.guardm = true
+  }
+
   func attack(pokemon: Pokemon) {
+    var damage = 0.0
     //If defense higher than attack only does 75% of the attack points as damage
     if(attack > pokemon.defense){
-      let damage = attack
-      pokemon.hp = pokemon.hp - damage
+      damage = attack
     }else{
-      let damage = round(0.75 * attack)
+      damage = round(0.75 * attack)
+    }
+
+    //If Enemy Guarded Lower damage by 50%
+    if(pokemon.guardm == true){
+      pokemon.hp = pokemon.hp - round(0.50 * damage)
+    }else{
       pokemon.hp = pokemon.hp - damage
     }
     print("(name) attacks (pokemon.name).")
     print("(pokemon.name) has (pokemon.hp) hit points remaining.")
+    pokemon.guardm = false
   }
 
   func spattack(pokemon: Pokemon) {
-    //If weakness: only 20% of final damage count, If strength: +75% to final damage count, If same type: No effect
+    //If weakness: only 20% to damage count, If strength: +75% to damage count, If same type: No effect
     var multiplier = 1.0
+    var damage = 0.0
     if(strength == pokemon.type){
       multiplier = 1.75
       print("(name) attacks (pokemon.name) with special attack. Super effective")
@@ -60,14 +74,21 @@ class Pokemon {
       print("(name) attacks (pokemon.name) with special attack. Not Very Effective")
     }
 
+    //If defense higher than attack only does 75% of the attack points as damage
     if(attack > pokemon.defense){
-      let damage = round(attack * multiplier)
-      pokemon.hp = pokemon.hp - damage
+      damage = round(attack * multiplier)
     }else{
-      let damage = round(0.75 * attack * multiplier)
+      damage = round(0.75 * attack * multiplier)
+    }
+
+    //If Enemy Guarded Lower damage by 50%
+    if(pokemon.guardm == true){
+      pokemon.hp = pokemon.hp - round(0.50 * damage)
+    }else{
       pokemon.hp = pokemon.hp - damage
     }
-    
+
       print("(pokemon.name) has (pokemon.hp) hit points remaining.")
+      pokemon.guardm = false
   }
 }
