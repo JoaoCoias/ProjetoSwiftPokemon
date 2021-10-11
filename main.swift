@@ -94,9 +94,187 @@ class Pokemon {
 }
 
 
+//Variaveis Globais
+var choice_menu:Int
+var password_admin:String = "123"
 
-// init(name: String, hp: Double, attack: Double, defense: Double, type: String)
 
-var pk1 = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire")
+///////////////////////
+/////MENU PRINCIPAL////
+///////////////////////
+
+func MenuMain() -> Int{
+
+var flag:Int = 0
+
+print(
+  "----------------\n",
+  "1 - Admin Menu  \n",
+  "2 - Play Game   \n",
+  "0 -    Exit     \n",
+  "------------------")
+
+flag = Int(readLine()!)!
+
+return flag
+}
+
+///////////////////////
+///// MENU ADMIN //////
+///////////////////////
+
+func MenuAdmin() -> Int{
+
+var flag:Int = 0
+
+print(
+  "----------------..\n",
+  "1 - Add Pokemon   \n",
+  "2 - Remove Pokemon\n",
+  "3 - Edit Pokemon  \n",
+  "0 -     Exit      \n",
+  "--------------------")
+
+flag = Int(readLine()!)!
+
+return flag
+}
+
+///////////////////////
+///// MENU PLAY ///////
+///////////////////////
+
+func MenuPlay() -> Int{
+
+var flag:Int = 0
+
+print(
+  "----------------------------------\n",
+  "1 - Play Against Random Opponent  \n",
+  "2 - Play Against Another Player   \n",
+  "3 - Battle History                \n",
+  "0 -          Exit                 \n",
+  "------------------------------------")
+
+flag = Int(readLine()!)!
+
+return flag
+}
 
 
+//////////////////
+///// Ler Menu ///
+/////////////////
+
+func LerMenuMain(choice_menu:Int) -> Bool{
+
+var dev:Bool = true
+var pass:String
+
+		switch (choice_menu) {
+        case 1:
+            print("Introduza a password de aministrador :")
+            pass = readLine()!
+            if(pass == password_admin)
+                    {
+                      MenuAdmin()
+                    }
+            else{
+                  print("Password incorrecta, tente de novo. ")
+
+            }        
+            break
+
+        case 2:
+                MenuPlay()
+            break
+
+         case 0:
+            dev = false
+            break
+        default:// Outras opcoes
+			      dev = false
+			      break    
+           
+}
+ return dev
+}
+
+func LerMenuAdmin(choice:Int) -> Bool{
+
+var dev:Bool = true
+
+		switch (choice) {
+        case 1:
+          
+            break
+
+        case 2:
+
+            break
+
+        case 3:
+            break
+
+        case 0:
+            break
+
+
+        default:// Outras opcoes
+			   dev = false
+			      break      
+       
+}
+     return dev
+}
+
+func LerMenuPlay(choice:Int) -> Bool{
+
+var dev:Bool = true
+
+		switch (choice) {
+        case 1:
+          
+            break
+
+        case 2:
+
+            break
+
+        case 3:
+            break
+
+        case 0:
+            break
+
+            
+        default:// Outras opcoes
+			   dev = false
+			      break    
+       
+}     
+
+     return dev
+}
+
+
+//Tipos de Pokemon nivel1
+var Charmander = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire")
+
+var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"Water")
+
+var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant")
+
+//Tipos de Pokemon nivel2
+
+
+//Tipos de Pokemon nivel3
+
+
+
+var fl = true
+
+while fl {
+  choice_menu = MenuMain()
+  fl = LerMenuMain(choice_menu:choice_menu)
+}
