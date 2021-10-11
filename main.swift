@@ -1,5 +1,5 @@
 import Foundation
-//teste teste  push 3
+
 class Pokemon {
   let name: String
   var hp: Double
@@ -92,3 +92,11 @@ class Pokemon {
       pokemon.guardm = false
   }
 }
+
+
+
+// init(name: String, hp: Double, attack: Double, defense: Double, type: String)
+
+var pk1 = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire")
+
+
