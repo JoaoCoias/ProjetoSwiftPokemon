@@ -271,7 +271,12 @@ var pass:String
             pass = readLine()!
             if(pass == password_admin)
                     {
-                      MenuAdmin()
+                      var choice_menuad = 0
+                      var f2 = true
+                      while f2 {
+                        choice_menuad = MenuAdmin()
+                        f2 = LerMenuAdmin(choice:choice_menuad)
+                      }
                     }
             else{
                   print("Password incorrecta, tente de novo. ")
@@ -311,6 +316,7 @@ var dev:Bool = true
             break
 
         case 0:
+        dev = false
             break
 
 
