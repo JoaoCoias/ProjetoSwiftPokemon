@@ -13,9 +13,10 @@ class Pokemon {
   var xpreq: Int
   var level : Int
   var guardm: Bool
+  var idPokemon:Int
 
   //Pokemon creation
-  init(name: String, hp: Double, attack: Double, defense: Double, type: String)
+  init(name: String, hp: Double, attack: Double, defense: Double, type: String,idPokemon:Int)
   {
     self.name = name
     self.hp = hp
@@ -25,6 +26,7 @@ class Pokemon {
     self.type = type
     self.guardm = false
     self.level = 1
+    self.idPokemon = idPokemon 
     if(type == "Fire"){
       weakness = "Water"
       strength = "Plant"
@@ -113,11 +115,11 @@ class Pokemon {
 
 
 //Tipos de Pokemon nivel1
-var Charmander = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire")
+var Charmander = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire",idPokemon:1)
 
-var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"Water")
+var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"Water",idPokemon:2)
 
-var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant")
+var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant",idPokemon:3)
 
 //Tipos de Pokemon nivel2
 
@@ -183,14 +185,28 @@ switch(choice)
 
   type2 = type.rawValue
 
-  var pokemon = Pokemon(name:name!, hp:hp, attack:attack, defense:defense,type:type2)
+  var pokemon = Pokemon(name:name!, hp:hp, attack:attack, defense:defense,type:type2,idPokemon:lista_pokemons[lista_pokemons.count-1].idPokemon+1)
+
+ lista_pokemons.append(pokemon)
 
 
-  lista_pokemons.append(pokemon)
-
-  
 }
 
+func RemovePokemon() {
+  
+    for item in lista_pokemons {
+      print(item.idPokemon,"-",item.name)  
+  }
+
+  print("Qual o Pokemon a eliminar. Escolha o Id ->")
+  var aux = Int(readLine()!)!
+
+   for item in lista_pokemons where item.idPokemon == aux {
+
+    if let index = lista_pokemons.firstIndex(of:item){
+      lista_pokemons.remove(at: index)}
+  }
+}
 
 
 ///////////////////////
