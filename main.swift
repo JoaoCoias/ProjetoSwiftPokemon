@@ -112,9 +112,85 @@ class Pokemon {
 }
 
 
+//Tipos de Pokemon nivel1
+var Charmander = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire")
+
+var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"Water")
+
+var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant")
+
+//Tipos de Pokemon nivel2
+
+
+//Tipos de Pokemon nivel3
+
+// Array de pokemons
+var lista_pokemons = [Charmander,Squirtle,Bulbasour]
+
+
 //Variaveis Globais
 var choice_menu:Int
 var password_admin:String = "123"
+
+enum Pokemon_enum:String {
+        case Fire = "Fire"
+        case Water = "Water"
+        case Plant = "Plant"
+    }
+
+
+
+func AddPokemon() {
+
+  var name:String?
+  var hp:Double
+  var attack:Double
+  var defense:Double
+  var choice:Int
+
+  var type2:String
+
+  
+  print("Insira um nome do Pokemon")
+  name = readLine()
+  print("Insira o Hp do Pokemon")
+  hp = Double(readLine()!)!
+  print("Insira o ataque do Pokemon")
+  attack = Double(readLine()!)!
+  print("Insira a defesa do Pokemon")
+  defense = Double(readLine()!)!
+  print("Insira o tipo 1:Fire , 2:Water , 3:Plant")
+  choice = Int(readLine()!)!
+
+var type:Pokemon_enum = .Fire
+
+switch(choice)
+  {
+    case 1:
+       type =  Pokemon_enum.Fire
+   
+    case 2:
+       type =  Pokemon_enum.Water
+
+    case 3:
+       type =  Pokemon_enum.Plant
+    
+     default:
+          print("Incorrect number. Choose from 1 to 3")
+          
+      break   
+  }
+
+  type2 = type.rawValue
+
+  var pokemon = Pokemon(name:name!, hp:hp, attack:attack, defense:defense,type:type2)
+
+
+  lista_pokemons.append(pokemon)
+
+  
+}
+
 
 
 ///////////////////////
@@ -224,7 +300,7 @@ var dev:Bool = true
 
 		switch (choice) {
         case 1:
-          
+            AddPokemon()
             break
 
         case 2:
@@ -274,19 +350,6 @@ var dev:Bool = true
 
      return dev
 }
-
-
-//Tipos de Pokemon nivel1
-var Charmander = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire")
-
-var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"Water")
-
-var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant")
-
-//Tipos de Pokemon nivel2
-
-
-//Tipos de Pokemon nivel3
 
 
 
