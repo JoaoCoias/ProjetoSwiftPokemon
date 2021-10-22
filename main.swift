@@ -280,19 +280,19 @@ func escolha() {
 func combateRandom()  {
 
   let max = lista_pokemons[lista_pokemons.count-1].idPokemon
-  var nums = [Int](0...max)
-  nums.remove(at: 1)
+  var nums = [Int](1...max)
+  nums.remove(at: PokEsc-1)
 
   for item in nums
   {
     print("wer",item)
   }
-/*
-  let random = Int.random(in:0 ... nums.count)
+
+  let random = Int.random(in:1 ... nums.count)
   
   print("Escolhido",nums[random-1])
   
-*/
+
 
 }
 
