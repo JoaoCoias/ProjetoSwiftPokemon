@@ -289,9 +289,34 @@ func combateRandom()  {
   }
 
   let random = Int.random(in:1 ... nums.count)
+
+  print("Adversario",lista_pokemons[nums[random-1]].name,
+        "\nHP -",lista_pokemons[nums[random-1]].hp,
+        "\nAtaque -",lista_pokemons[nums[random-1]].attack,
+        "\nDefesa -",lista_pokemons[nums[random-1]].defense,
+        "\ntipo -",lista_pokemons[nums[random-1]].type)
   
   print("Escolhido",nums[random-1])
-  
+
+  print("1 - Atacar",
+        "2 - Ataque Especial",
+        "3 - Defender",
+        "4 - Fugir")
+  var Esc = Int(readLine()!)!
+
+  switch(Esc){
+    case 1:
+      lista_pokemons[nums[random-1]].
+    case 2:
+
+    case 3:
+
+    case 4:
+
+    default
+      print("Invalido")
+      
+  }
 
 
 }
