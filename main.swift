@@ -113,18 +113,19 @@ class Pokemon {
   }
 }
 
+extension Pokemon: Equatable{
+  static func == (lhs: Pokemon, rhs: Pokemon) -> Bool{
+    return (lhs.idPokemon == rhs.idPokemon)
+  }
+}
 
-//Tipos de Pokemon nivel1
+//Default Pokemon
 var Charmander = Pokemon(name:"Charmander",hp:35.0, attack:55.0,defense:40.0, type:"Fire",idPokemon:1)
 
 var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"Water",idPokemon:2)
 
 var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant",idPokemon:3)
 
-//Tipos de Pokemon nivel2
-
-
-//Tipos de Pokemon nivel3
 
 // Array de pokemons
 var lista_pokemons = [Charmander,Squirtle,Bulbasour]
@@ -325,7 +326,7 @@ var dev:Bool = true
             break
 
         case 2:
-
+            RemovePokemon()
             break
 
         case 3:
