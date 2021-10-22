@@ -134,6 +134,8 @@ var lista_pokemons = [Charmander,Squirtle,Bulbasour]
 //Variaveis Globais
 var choice_menu:Int
 var password_admin:String = "123"
+var PokEsc:Int = 0
+
 
 enum Pokemon_enum:String {
         case Fire = "Fire"
@@ -193,6 +195,60 @@ switch(choice)
 
 }
 
+func editarPokemon() {
+  // TODO
+  var name:String?
+  var hp:Double
+  var attack:Double
+  var defense:Double
+  var choice:Int
+
+  var type2:String
+
+
+    for item in lista_pokemons {
+      print(item.idPokemon,"-",item.name)  
+  }
+  
+  print("Insira um nome do Pokemon para editar")
+  name = readLine()
+  print("Insira o Hp do Pokemon")
+  hp = Double(readLine()!)!
+  print("Insira o ataque do Pokemon")
+  attack = Double(readLine()!)!
+  print("Insira a defesa do Pokemon")
+  defense = Double(readLine()!)!
+  print("Insira o tipo 1:Fire , 2:Water , 3:Plant")
+  choice = Int(readLine()!)!
+
+var type:Pokemon_enum = .Fire
+
+switch(choice)
+  {
+    case 1:
+       type =  Pokemon_enum.Fire
+   
+    case 2:
+       type =  Pokemon_enum.Water
+
+    case 3:
+       type =  Pokemon_enum.Plant
+    
+     default:
+          print("Incorrect number. Choose from 1 to 3")
+          
+      break   
+  }
+
+  type2 = type.rawValue
+
+  var pokemon = Pokemon(name:name!, hp:hp, attack:attack, defense:defense,type:type2,idPokemon:lista_pokemons[lista_pokemons.count-1].idPokemon+1)
+
+ lista_pokemons.append(pokemon)
+
+
+}
+
 func RemovePokemon() {
   
     for item in lista_pokemons {
@@ -209,6 +265,36 @@ func RemovePokemon() {
   }
 }
 
+func escolha() {
+
+  for item in lista_pokemons {
+      print(item.idPokemon,"-",item.name)  
+  }
+
+  print("Selecione o pokemon")
+  PokEsc = Int(readLine()!)!
+  
+
+}
+
+func combateRandom()  {
+
+  let max = lista_pokemons[lista_pokemons.count-1].idPokemon
+  var nums = [Int](0...max)
+  nums.remove(at: 1)
+
+  for item in nums
+  {
+    print("wer",item)
+  }
+/*
+  let random = Int.random(in:0 ... nums.count)
+  
+  print("Escolhido",nums[random-1])
+  
+*/
+
+}
 
 ///////////////////////
 /////MENU PRINCIPAL////
@@ -302,7 +388,14 @@ var pass:String
             break
 
         case 2:
-                MenuPlay()
+             var choice_menuad = 0
+              var f2 = true
+                    escolha()
+                      while f2 {
+                        choice_menuad = MenuPlay()
+                        f2 = LerMenuPlay(choice:choice_menuad)
+                      }
+                
             break
 
          case 0:
@@ -347,11 +440,12 @@ var dev:Bool = true
 
 func LerMenuPlay(choice:Int) -> Bool{
 
+
 var dev:Bool = true
 
 		switch (choice) {
         case 1:
-          
+          combateRandom()
             break
 
         case 2:
@@ -362,6 +456,7 @@ var dev:Bool = true
             break
 
         case 0:
+			   dev = false
             break
 
             
