@@ -303,7 +303,7 @@ func combateRandom()  {
         "3 - Defender",
         "4 - Fugir")
   var Esc = Int(readLine()!)!
-
+/*
   switch(Esc){
     case 1:
       lista_pokemons[nums[random-1]].
@@ -317,7 +317,7 @@ func combateRandom()  {
       print("Invalido")
       
   }
-
+*/
 
 }
 
