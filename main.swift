@@ -52,7 +52,7 @@ class Pokemon {
   }
 
   //Basic Attack
-  func attack(pokemon: Pokemon) {
+  func Battack(pokemon: Pokemon) {
 
     var damage = 0.0
 
@@ -60,23 +60,23 @@ class Pokemon {
     if(attack > pokemon.defense){
       damage = attack
     }else{
-      damage = round(0.75 * attack)
+      damage = 0.75 * attack
     }
 
     //If Enemy Guarded Lower damage by 50%
     if(pokemon.guardm == true){
-      pokemon.hp = pokemon.hp - round(0.50 * damage)
+      pokemon.hp = pokemon.hp - (0.50 * damage)
     }else{
       pokemon.hp = pokemon.hp - damage
     }
 
-    print("(name) attacks (pokemon.name).")
-    print("(pokemon.name) has (pokemon.hp) hit points remaining.")
+    print(name," attacks ",pokemon.name,".")
+    print(pokemon.name," has ",pokemon.hp," hit points remaining.")
     pokemon.guardm = false
   }
 
   //Special Attack
-  func spattack(pokemon: Pokemon) {
+  func Spattack(pokemon: Pokemon) {
 
     var multiplier = 1.0
     var damage = 0.0
@@ -84,31 +84,31 @@ class Pokemon {
     //If weakness: only 20% to damage count, If strength: +75% to damage count, If same type: No effect
     if(strength == pokemon.type){
       multiplier = 1.75
-      print("(name) attacks (pokemon.name) with special attack. Super effective")
+      print(name," attacks ",pokemon.name," with special attack. Super effective")
     }else if(type == pokemon.type){
       multiplier = 0
-      print("(name) attacks (pokemon.name) with special attack. It has no effect")
+      print(name," attacks ",pokemon.name," with special attack. It has no effect")
       return
     }else{
       multiplier = 0.2
-      print("(name) attacks (pokemon.name) with special attack. Not Very Effective")
+      print(name," attacks ",pokemon.name," with special attack. Not Very Effective")
     }
 
     //If defense higher than attack only does 75% of the attack points as damage
     if(attack > pokemon.defense){
-      damage = round(attack * multiplier)
+      damage = attack * multiplier
     }else{
-      damage = round(0.75 * attack * multiplier)
+      damage = 0.75 * attack * multiplier
     }
 
     //If Enemy Guarded Lower damage by 50%
     if(pokemon.guardm == true){
-      pokemon.hp = pokemon.hp - round(0.50 * damage)
+      pokemon.hp = pokemon.hp - 0.50 * damage
     }else{
       pokemon.hp = pokemon.hp - damage
     }
 
-    print("(pokemon.name) has (pokemon.hp) hit points remaining.")
+    print(pokemon.name," has ",pokemon.hp," hit points remaining.")
     pokemon.guardm = false
   }
 }
@@ -135,6 +135,7 @@ var lista_pokemons = [Charmander,Squirtle,Bulbasour]
 var choice_menu:Int
 var password_admin:String = "123"
 var PokEsc:Int = 0
+var combat = true
 
 
 enum Pokemon_enum:String {
@@ -227,13 +228,13 @@ switch(choice)
   {
     case 1:
        type =  Pokemon_enum.Fire
-   
+       break
     case 2:
        type =  Pokemon_enum.Water
-
+       break
     case 3:
        type =  Pokemon_enum.Plant
-    
+       break
      default:
           print("Incorrect number. Choose from 1 to 3")
           
@@ -277,32 +278,96 @@ func escolha() {
 
 }
 
-func combateRandom()  {
+func EndCombat() {
 
-  let max = lista_pokemons[lista_pokemons.count-1].idPokemon
-  var nums = [Int](1...max)
-  nums.remove(at: PokEsc-1)
+  combat = false
+}
 
-  for item in nums
-  {
-    print("wer",item)
-  }
-
-  let random = Int.random(in:1 ... nums.count)
-
-  print("Adversario",lista_pokemons[nums[random-1]].name,
-        "\nHP -",lista_pokemons[nums[random-1]].hp,
-        "\nAtaque -",lista_pokemons[nums[random-1]].attack,
-        "\nDefesa -",lista_pokemons[nums[random-1]].defense,
-        "\ntipo -",lista_pokemons[nums[random-1]].type)
-  
-  print("Escolhido",nums[random-1])
-
-  print("1 - Atacar",
+func PlayerTurn(Pokemonai:Pokemon) -> Bool {
+print("1 - Atacar",
         "2 - Ataque Especial",
         "3 - Defender",
         "4 - Fugir")
-  var Esc = Int(readLine()!)!
+    var Esc = 1
+    Esc = Int(readLine()!)!
+
+    switch(Esc){
+      case 1:
+      for item in lista_pokemons where item.idPokemon == PokEsc {
+          if let index = lista_pokemons.firstIndex(of:item){
+            lista_pokemons[index].Battack(pokemon:Pokemonai)
+          }
+          
+       }
+       if(Pokemonai.hp <= 0){
+
+       }
+        break
+      case 2:
+        for item in lista_pokemons where item.idPokemon == PokEsc {
+          if let index = lista_pokemons.firstIndex(of:item){
+            lista_pokemons[index].Spattack(pokemon:Pokemonai)
+          }
+          
+       }
+       if(Pokemonai.hp <= 0){
+
+       }
+        break
+      case 3:
+        for item in lista_pokemons where item.idPokemon == PokEsc {
+          if let index = lista_pokemons.firstIndex(of:item){
+            lista_pokemons[index].guardmove()
+          }
+          
+       }
+        break
+      case 4:
+        print("4")
+        break
+      default:
+        print("Invalido")
+        break
+    }
+
+  return false
+}
+
+func AiTurn() -> Bool {
+  return true
+}
+
+func combateRandom()  {
+  combat = true
+  var turn = true
+  var indexai = 0
+  let max = lista_pokemons[lista_pokemons.count-1].idPokemon
+  
+  var nums = [Int](1...max)
+  nums.remove(at: PokEsc-1)
+
+  let random = Int.random(in:1 ... nums.count)
+   for item in lista_pokemons where item.idPokemon == nums[random-1] {
+
+    if let index = lista_pokemons.firstIndex(of:item){
+      indexai = index
+      print("Adversario",lista_pokemons[index].name,
+        "\nHP -",lista_pokemons[index].hp,
+        "\nAtaque -",lista_pokemons[index].attack,
+        "\nDefesa -",lista_pokemons[index].defense,
+        "\ntipo -",lista_pokemons[index].type)
+    }
+   }
+
+
+  while(combat){
+    if(turn==true){
+     turn = PlayerTurn(Pokemonai:lista_pokemons[indexai])
+    }else{
+      turn = AiTurn()
+    }
+  }
+  
 /*
   switch(Esc){
     case 1:
