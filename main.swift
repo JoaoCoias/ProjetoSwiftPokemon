@@ -1,5 +1,20 @@
 import Foundation
 
+class CombatHistory{
+  var victor: String
+  var loser: String
+  var pokpl1: String
+  var pokpl2: String
+
+  init(victor:String,loser:String,pokpl1:String,pokpl2:String){
+    self.victor = victor
+    self.loser = loser
+    self.pokpl1 = pokpl1
+    self.pokpl2 = pokpl2
+  }
+
+}
+
 class Pokemon {
   let name: String
   var hp: Double
@@ -44,6 +59,7 @@ class Pokemon {
   //Guard Move
   func guardmove(){
     self.guardm = true
+    print(self.name," guards")
   }
 
   //Repor Hitpoints
@@ -71,7 +87,12 @@ class Pokemon {
     }
 
     print(name," attacks ",pokemon.name,".")
-    print(pokemon.name," has ",pokemon.hp," hit points remaining.")
+    if(pokemon.hp < 0){
+      print(pokemon.name," has ",0," hit points remaining.")
+    }else{
+      print(pokemon.name," has ",pokemon.hp," hit points remaining.")
+    }
+    
     pokemon.guardm = false
   }
 
@@ -108,7 +129,11 @@ class Pokemon {
       pokemon.hp = pokemon.hp - damage
     }
 
-    print(pokemon.name," has ",pokemon.hp," hit points remaining.")
+    if(pokemon.hp < 0){
+      print(pokemon.name," has ",0," hit points remaining.")
+    }else{
+      print(pokemon.name," has ",pokemon.hp," hit points remaining.")
+    }
     pokemon.guardm = false
   }
 }
@@ -126,6 +151,8 @@ var Squirtle = Pokemon(name:"Squirtle",hp:44.0, attack:48.0,defense:65.0, type:"
 
 var Bulbasour = Pokemon(name:"Bulbasour",hp:45.0, attack:49.0,defense:49.0, type:"Plant",idPokemon:3)
 
+// Array de combates
+var lista_combats:[CombatHistory] = []
 
 // Array de pokemons
 var lista_pokemons = [Charmander,Squirtle,Bulbasour]
@@ -135,7 +162,10 @@ var lista_pokemons = [Charmander,Squirtle,Bulbasour]
 var choice_menu:Int
 var password_admin:String = "123"
 var PokEsc:Int = 0
+var PokEscPl2:Int = 0
 var combat = true
+let winxp = 25
+let reqxpinc = 25
 
 
 enum Pokemon_enum:String {
@@ -266,64 +296,103 @@ func RemovePokemon() {
   }
 }
 
-func escolha() {
+func escolha(trigger:Bool) {
 
   for item in lista_pokemons {
       print(item.idPokemon,"-",item.name)  
   }
 
   print("Selecione o pokemon")
-  PokEsc = Int(readLine()!)!
+  if(trigger==false){
+    PokEsc = Int(readLine()!)!
+  }else{
+    repeat{
+    print("Pokemon ",PokEsc," Utilizador por player 1")
+    PokEscPl2 = Int(readLine()!)!
+    }while(PokEscPl2==PokEsc)
+  }
+  
   
 
 }
 
-func EndCombat() {
+func EndCombat(PokemonVictor:Pokemon,PokemonLoser:Pokemon) {
+  var victor = ""
+  var loser = ""
+  print(PokemonVictor.name," earned ",winxp," xp\n")
+  PokemonVictor.xp += winxp
+  if(PokemonVictor.xp >= PokemonVictor.xpreq){
+    PokemonVictor.level += 1
+    PokemonVictor.xp = PokemonVictor.xpreq - PokemonVictor.xp
+    PokemonVictor.xpreq += reqxpinc
+    print(PokemonVictor.name," has reached level ",PokemonVictor.level,".\n",PokemonVictor.xpreq - PokemonVictor.xp," xp until next level")
+  }
+  PokemonVictor.resetHp()
+  PokemonLoser.resetHp()
+
+  if(PokemonVictor.idPokemon == PokEsc){
+    victor = "Player1"
+    if(PokemonLoser.idPokemon == PokEscPl2){
+      loser = "Player2"
+    }else{
+      loser = "CPU"
+    }
+  }else if(PokemonVictor.idPokemon == PokEscPl2){
+    victor = "Player2"
+    loser = "Player1"
+  }else{
+    victor = "CPU"
+    loser = "Player1"
+  }
+
+  var combatlog = CombatHistory(victor:victor,loser:loser,pokpl1:PokemonVictor.name,pokpl2:PokemonLoser.name)
+
+  lista_combats.append(combatlog)
+
+  print("\nO jogador: ",combatlog.victor, "venceu o combate.\n")
+
+
 
   combat = false
 }
 
-func PlayerTurn(Pokemonai:Pokemon) -> Bool {
-print("1 - Atacar",
-        "2 - Ataque Especial",
-        "3 - Defender",
-        "4 - Fugir")
+func escape(){
+  var escapevalue = 50
+  var escapecalc = Int.random(in:1 ... 100)
+  if(escapecalc > escapevalue){
+    print("\nFailed to escape\n")
+  }else{
+    print("\nEscaped successfully\n")
+    combat = false
+  }
+}
+
+func PlayerTurn(PokemonPl2:Pokemon,PokemonPl:Pokemon) -> Bool {
+print(" \n1 - Atacar",
+        "\n2 - Ataque Especial",
+        "\n3 - Defender",
+        "\n4 - Fugir")
     var Esc = 1
     Esc = Int(readLine()!)!
 
     switch(Esc){
       case 1:
-      for item in lista_pokemons where item.idPokemon == PokEsc {
-          if let index = lista_pokemons.firstIndex(of:item){
-            lista_pokemons[index].Battack(pokemon:Pokemonai)
-          }
-          
-       }
-       if(Pokemonai.hp <= 0){
-
+            PokemonPl.Battack(pokemon:PokemonPl2)
+       if(PokemonPl2.hp <= 0){
+        EndCombat(PokemonVictor:PokemonPl,PokemonLoser:PokemonPl2)
        }
         break
       case 2:
-        for item in lista_pokemons where item.idPokemon == PokEsc {
-          if let index = lista_pokemons.firstIndex(of:item){
-            lista_pokemons[index].Spattack(pokemon:Pokemonai)
-          }
-          
-       }
-       if(Pokemonai.hp <= 0){
-
+            PokemonPl.Spattack(pokemon:PokemonPl2)
+       if(PokemonPl2.hp <= 0){
+         EndCombat(PokemonVictor:PokemonPl,PokemonLoser:PokemonPl2)
        }
         break
       case 3:
-        for item in lista_pokemons where item.idPokemon == PokEsc {
-          if let index = lista_pokemons.firstIndex(of:item){
-            lista_pokemons[index].guardmove()
-          }
-          
-       }
+            PokemonPl.guardmove()
         break
       case 4:
-        print("4")
+          escape()
         break
       default:
         print("Invalido")
@@ -333,14 +402,79 @@ print("1 - Atacar",
   return false
 }
 
-func AiTurn() -> Bool {
+func AiTurn(Pokemonai:Pokemon,PokemonPl:Pokemon) -> Bool {
+  var escapecalc = Int.random(in:1 ... 120)
+  switch(escapecalc){
+    case 1 ... 50:
+       Pokemonai.Battack(pokemon:PokemonPl)
+       if(PokemonPl.hp <= 0){
+        EndCombat(PokemonVictor:Pokemonai,PokemonLoser:PokemonPl)
+       }
+      break
+    case 51 ... 100:
+       Pokemonai.Spattack(pokemon:PokemonPl)
+       if(PokemonPl.hp <= 0){
+         EndCombat(PokemonVictor:Pokemonai,PokemonLoser:PokemonPl)
+       }
+      break
+    case 101 ... 120:
+      Pokemonai.guardmove()
+      break
+    default:
+    break
+  }
   return true
+}
+
+func combathistorylist(){
+  for item in lista_combats {
+      print("Victor:",item.victor," - Pokemon:",item.pokpl1," - Loser:",item.loser," - Pokemon:",item.pokpl2)  
+  }
+}
+
+func combatePlvsPl(){
+  combat = true
+  var turn = true
+  var indexPokPl1 = 0
+  var indexPokPl2 = 0
+  for item in lista_pokemons where item.idPokemon == PokEsc {
+          if let index = lista_pokemons.firstIndex(of:item){
+           indexPokPl1 = index
+          }
+   }
+   for item in lista_pokemons where item.idPokemon == PokEscPl2 {
+          if let index = lista_pokemons.firstIndex(of:item){
+           indexPokPl2 = index
+          }
+   }
+    print("Player1",lista_pokemons[indexPokPl1].name,
+        "\nHP -",lista_pokemons[indexPokPl1].hp,
+        "\nAtaque -",lista_pokemons[indexPokPl1].attack,
+        "\nDefesa -",lista_pokemons[indexPokPl1].defense,
+        "\ntipo -",lista_pokemons[indexPokPl1].type)
+
+    print("Player2",lista_pokemons[indexPokPl2].name,
+        "\nHP -",lista_pokemons[indexPokPl2].hp,
+        "\nAtaque -",lista_pokemons[indexPokPl2].attack,
+        "\nDefesa -",lista_pokemons[indexPokPl2].defense,
+        "\ntipo -",lista_pokemons[indexPokPl2].type)
+
+  while(combat){
+    if(turn==true){
+     turn = PlayerTurn(PokemonPl2:lista_pokemons[indexPokPl2],PokemonPl:lista_pokemons[indexPokPl1])
+    }else{
+      PlayerTurn(PokemonPl2:lista_pokemons[indexPokPl1],PokemonPl:lista_pokemons[indexPokPl2])
+      turn = true
+    }
+  }
+
 }
 
 func combateRandom()  {
   combat = true
   var turn = true
   var indexai = 0
+  var indexPokPl = 0
   let max = lista_pokemons[lista_pokemons.count-1].idPokemon
   
   var nums = [Int](1...max)
@@ -358,31 +492,20 @@ func combateRandom()  {
         "\ntipo -",lista_pokemons[index].type)
     }
    }
+   for item in lista_pokemons where item.idPokemon == PokEsc {
+          if let index = lista_pokemons.firstIndex(of:item){
+           indexPokPl = index
+          }
+   }
 
 
   while(combat){
     if(turn==true){
-     turn = PlayerTurn(Pokemonai:lista_pokemons[indexai])
+     turn = PlayerTurn(PokemonPl2:lista_pokemons[indexai],PokemonPl:lista_pokemons[indexPokPl])
     }else{
-      turn = AiTurn()
+      turn = AiTurn(Pokemonai:lista_pokemons[indexai],PokemonPl:lista_pokemons[indexPokPl])
     }
   }
-  
-/*
-  switch(Esc){
-    case 1:
-      lista_pokemons[nums[random-1]].
-    case 2:
-
-    case 3:
-
-    case 4:
-
-    default
-      print("Invalido")
-      
-  }
-*/
 
 }
 
@@ -418,7 +541,6 @@ print(
   "----------------..\n",
   "1 - Add Pokemon   \n",
   "2 - Remove Pokemon\n",
-  "3 - Edit Pokemon  \n",
   "0 -     Exit      \n",
   "--------------------")
 
@@ -480,7 +602,7 @@ var pass:String
         case 2:
              var choice_menuad = 0
               var f2 = true
-                    escolha()
+                    escolha(trigger:false)
                       while f2 {
                         choice_menuad = MenuPlay()
                         f2 = LerMenuPlay(choice:choice_menuad)
@@ -512,9 +634,6 @@ var dev:Bool = true
             RemovePokemon()
             break
 
-        case 3:
-            break
-
         case 0:
         dev = false
             break
@@ -539,10 +658,12 @@ var dev:Bool = true
             break
 
         case 2:
-
+          escolha(trigger:true)
+          combatePlvsPl()
             break
 
         case 3:
+          combathistorylist()
             break
 
         case 0:
